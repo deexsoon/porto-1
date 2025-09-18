@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Khoir</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .metal-border {
+            border: 1px solid #333;
+            background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .metal-card {
+            background: linear-gradient(145deg, #1e1e1e, #252525);
+            border: 1px solid #333;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .metal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+        }
+        
+        .nav-link {
+            position: relative;
+            padding: 10px 0;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .active-nav::after {
+            width: 100%;
+        }
+        
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .bg-dark-metal {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .skill-bar {
+            height: 8px;
+            background: #2a2a2a;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .skill-progress {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .skill-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(
+                -45deg, 
+                rgba(255, 255, 255, 0.2) 25%, 
+                transparent 25%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 255, 255, 0.2) 75%, 
+                transparent 75%, 
+                transparent
+            );
+            z-index: 1;
+            background-size: 20px 20px;
+            animation: move 2s linear infinite;
+        }
+        
+        @keyframes move {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 20px 20px;
+            }
+        }
+        
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 8px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .gallery-item img {
+            transition: transform 0.5s ease;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        /* Animasi untuk halaman */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        /* Dark theme scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-dark-metal min-h-screen">
+    <!-- Navigasi -->
+    <nav class="fixed w-full z-50 metal-border py-4 px-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-xl font-bold text-gradient">Khoir Portofolio</div>
+            <div class="flex space-x-6">
+                <a href="#home" class="nav-link active-nav" data-page="home">Home</a>
+                <a href="#about" class="nav-link" data-page="about">About</a>
+                <a href="#portfolio" class="nav-link" data-page="portfolio">Portfolio</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Halaman Home -->
+    <div id="home" class="page active pt-20">
+        <!-- Hero Section -->
+        <section class="min-h-screen flex items-center justify-center py-20 px-6">
+            <div class="container mx-auto text-center">
+                <div class="mb-8">
+                    <div class="w-40 h-40 mx-auto rounded-full metal-border overflow-hidden mb-6">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80" alt="Khoir" class="w-full h-full object-cover">
+                    </div>
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">This Is <span class="text-gradient">Me</span></h1>
+                    <p class="text-xl max-w-2xl mx-auto">Most of my days are filled with <span class="text-gradient font-medium">designing</span> — from visuals to <span class="text-gradient font-medium">creative</span> experiments that keep my mind sharp.</p>
+                </div>
+                <div class="mt-12">
+                    <a href="#about" class="metal-card inline-block px-8 py-3 rounded-full text-lg font-medium">Explore My Journey</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Preview Section -->
+        <section class="py-16 px-6">
+            <div class="container mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12 section-title">My Path</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="metal-card p-6 rounded-lg">
+                        <div class="text-4xl mb-4 text-gradient">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Pesantren Graduate</h3>
+                        <p>Learned discipline, patience, and values that shape who I am today.</p>
+                    </div>
+                    <div class="metal-card p-6 rounded-lg">
+                        <div class="text-4xl mb-4 text-gradient">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">Creative Designer</h3>
+                        <p>Passionate about visual design and creative experiments.</p>
+                    </div>
+                    <div class="metal-card p-6 rounded-lg">
+                        <div class="text-4xl mb-4 text-gradient">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-3">STT-NF Bound</h3>
+                        <p>Ready to blend creativity with strong principles in my new chapter.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="py-16 px-6 bg-gradient-to-b from-[#0c0c0c] to-[#1a1a1a]">
+            <div class="container mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12 section-title">My Skills</h2>
+                <div class="max-w-2xl mx-auto">
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span>Visual Design</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span>Photography</span>
+                            <span>85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span>Creative Thinking</span>
+                            <span>95%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 95%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span>Problem Solving</span>
+                            <span>80%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 80%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6 additional sections would follow in a real implementation -->
+    </div>
+
+    <!-- Halaman About -->
+    <div id="about" class="page pt-20">
+        <section class="min-h-screen py-20 px-6">
+            <div class="container mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12 section-title">About Me</h2>
+                
+                <div class="flex flex-col md:flex-row items-center gap-10 mb-16">
+                    <div class="w-full md:w-1/2">
+                        <div class="metal-border rounded-lg overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="Khoir" class="w-full h-auto">
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2">
+                        <h3 class="text-2xl font-semibold mb-4">I'm Khoir - a regular guy with a passion for design and photography.</h3>
+                        <p class="mb-4">Growing up as the son of a businessman, I'm now creating my own journey. Currently preparing for college at STT-NF, where I'll begin my journey as a student ready to grow and explore.</p>
+                        <p>My experiences have taught me the value of discipline, hard work, and creativity. I believe in blending traditional values with modern creativity to create something unique.</p>
+                    </div>
+                </div>
+                
+                <div class="metal-card p-8 rounded-lg mb-16">
+                    <blockquote class="text-xl italic border-l-4 border-gradient pl-6 py-3">
+                        "I'm Khoir - a regular guy with a passion for design and photography. Growing up as the son of a businessman, I'm now creating my own journey."
+                    </blockquote>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="metal-card p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4 text-gradient">Education</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <div class="text-gradient mr-3"><i class="fas fa-graduation-cap"></i></div>
+                                <div>
+                                    <h4 class="font-medium">Pesantren Graduate</h4>
+                                    <p class="text-sm">Learned discipline and traditional values</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="text-gradient mr-3"><i class="fas fa-university"></i></div>
+                                <div>
+                                    <h4 class="font-medium">STT-NF (Future)</h4>
+                                    <p class="text-sm">Preparing for my college journey</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="metal-card p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4 text-gradient">Passions</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <div class="text-gradient mr-3"><i class="fas fa-paint-brush"></i></div>
+                                <div>
+                                    <h4 class="font-medium">Design</h4>
+                                    <p class="text-sm">Visual design and creative experiments</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="text-gradient mr-3"><i class="fas fa-camera"></i></div>
+                                <div>
+                                    <h4 class="font-medium">Photography</h4>
+                                    <p class="text-sm">Capturing moments and perspectives</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Halaman Portfolio -->
+    <div id="portfolio" class="page pt-20">
+        <section class="min-h-screen py-20 px-6">
+            <div class="container mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12 section-title">My Portfolio</h2>
+                
+                <div class="mb-12 text-center">
+                    <p>Here are some of my creative works and projects that showcase my skills in design and photography.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                    <!-- Portfolio Item 1 -->
+                    <div class="gallery-item metal-border rounded-lg h-64">
+                        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Design Project 1">
+                        <div class="gallery-overlay">
+                            <div class="text-center p-4">
+                                <h3 class="text-xl font-semibold mb-2">Visual Identity</h3>
+                                <p>Brand design for a local business</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Portfolio Item 2 -->
+                    <div class="gallery-item metal-border rounded-lg h-64">
+                        <img src="https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Design Project 2">
+                        <div class="gallery-overlay">
+                            <div class="text-center p-4">
+                                <h3 class="text-xl font-semibold mb-2">UI/UX Design</h3>
+                                <p>Mobile app interface design</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Portfolio Item 3 -->
+                    <div class="gallery-item metal-border rounded-lg h-64">
+                        <img src="https://images.unsplash.com/photo-1464822759849-e0e100921dae?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Photography 1">
+                        <div class="gallery-overlay">
+                            <div class="text-center p-4">
+                                <h3 class="text-xl font-semibold mb-2">Landscape Photography</h3>
+                                <p>Nature and outdoor photography</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Portfolio Item 4 -->
+                    <div class="gallery-item metal-border rounded-lg h-64">
+                        <img src="https://images.unsplash.com/photo-1554080353-a576cf803bda?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Photography 2">
+                        <div class="gallery-overlay">
+                            <div class="text-center p-4">
+                                <h3 class="text-xl font-semibold mb-2">Portrait Photography</h3>
+                                <p>People and character portraits</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Portfolio Item 5 -->
+                    <div class="gallery-item metal-border rounded-lg h-64">
+                        <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Design Project 3">
+                        <div class="gallery-overlay">
+                            <div class="text-center p-4">
+                                <h3 class="text-xl font-semibold mb-2">Graphic Design</h3>
+                                <p>Poster and promotional materials</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Portfolio Item 6 -->
+                    <div class="gallery-item metal-border rounded-lg h-64">
+                        <img src="https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Photography 3">
+                        <div class="gallery-overlay">
+                            <div class="text-center p-4">
+                                <h3 class="text-xl font-semibold mb-2">Urban Photography</h3>
+                                <p>Cityscapes and architecture</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="metal-card p-8 rounded-lg text-center">
+                    <h3 class="text-2xl font-semibold mb-4">Ready to create something together?</h3>
+                    <p class="mb-6">I'm always open to discussing new projects and creative opportunities.</p>
+                    <a href="#" class="inline-block px-6 py-3 metal-border rounded-full font-medium">Get In Touch</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="metal-border py-8 px-6 mt-12">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="text-xl font-bold text-gradient">Khoir Portofolio</div>
+                    <p class="text-sm">Design • Photography • Creativity</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-2xl text-gray-400 hover:text-gradient transition-colors"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-2xl text-gray-400 hover:text-gradient transition-colors"><i class="fab fa-behance"></i></a>
+                    <a href="#" class="text-2xl text-gray-400 hover:text-gradient transition-colors"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-2xl text-gray-400 hover:text-gradient transition-colors"><i class="fab fa-dribbble"></i></a>
+                </div>
+            </div>
+            <div class="text-center mt-8 pt-6 border-t border-gray-800">
+                <p>&copy; 2023 Khoir. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+            
+            // Set first page as active
+            pages[0].classList.add('active');
+            
+            // Handle navigation clicks
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Get target page
+                    const targetPage = this.getAttribute('data-page');
+                    
+                    // Update active navigation
+                    navLinks.forEach(nav => nav.classList.remove('active-nav'));
+                    this.classList.add('active-nav');
+                    
+                    // Show target page
+                    pages.forEach(page => {
+                        page.classList.remove('active');
+                        if (page.id === targetPage) {
+                            setTimeout(() => {
+                                page.classList.add('active');
+                            }, 100);
+                        }
+                    });
+                });
+            });
+            
+            // Add fade-in animation to elements when they come into view
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all metal-card elements
+            document.querySelectorAll('.metal-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
